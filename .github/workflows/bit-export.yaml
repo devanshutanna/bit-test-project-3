@@ -22,9 +22,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Install dependencies and build app
-      - name: Install Dependencies
+
+      - name: Add token to .npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" >> .npmrc
+
+      - name: Clean install node modules
         run: npm ci
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
       - name: bit config
         run: |
           npx bit config set analytics_reporting false
